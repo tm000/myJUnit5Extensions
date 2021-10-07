@@ -3,7 +3,9 @@ JUnit5 Custom Extension
 
 There are 2 JUnit5 extensions in the project:
 
-* `DatabaseExtension` 
+## `DatabaseExtension` 
+テストデータを準備するためのExtensionです。
+任意のSQLを実行してデータを準備します。
 
 ```java
 @ExtendWith(DatabaseExtension.class)
@@ -17,8 +19,25 @@ public class DatabaseExtensionTest {
     }
 }
 ```
-        
-* `WebServerExtension`
+
+テストで使用するDBの接続情報はtest/resources/testdb.propertiesに指定します。
+```
+jdbc.driver.class=
+jdbc.url=jdbc:h2:/tmp/h2db
+jdbc.username=sa
+jdbc.password=
+```
+
+@ExecuteSqlにはSQLを文字列かリソースファイルで指定します。
+@BeforeAll、@BeforeEachを付与したメソッドにも設定可能です。
+h2 databaseを使用した場合、1つのテストが終了する度にDROP ALL OBJECTSを実行してDBを初期化します。h2 database以外はテストしておらず同じような処理を自分で実装する必要があります。
+
+## `WebServerExtension`
+テスト用Webサーバーを立ち上げるExtensionです。
+@WebServerResponse、@SimpleHttpResponseを指定して任意のレスポンスを返却できます。
+enableSecurityにtrueを設定することでTLS1.2によるセキュリティを有効にできます。
+受信したリクエストはgetRequestsメソッドで取得できます。
+
 
 ```java
 public class WebServerExtensionTest {
