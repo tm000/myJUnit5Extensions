@@ -101,6 +101,7 @@ public class WebServerExtensionEnableSecuriyTest {
             // Do initial handshake
             engine.beginHandshake();
             if (doHandshake(client, engine, myNetData, peerNetData)) {
+                Thread.sleep(50);
                 write(client, engine, msg[i], myNetData, peerNetData);
                 String response = null;
                 while (true) {
@@ -232,7 +233,7 @@ public class WebServerExtensionEnableSecuriyTest {
             myNetData.flip();
             while (myNetData.hasRemaining()) {
                 client.write(myNetData);
-            }
+           }
             return true;
         case BUFFER_OVERFLOW:
             myNetData = ByteBuffer.allocate(myNetData.capacity() * 2);
